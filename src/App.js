@@ -1,25 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [monsters, setMonsters] = useState([]);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setMonsters(result)
+        }
+      )
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <input className='search-box' placeholder='search monsters' type='search' onChange={(event) => {
+          let boxSearch =monsters.filter(monster =>{
+          return monster.name[event.target.value.length-1] === event.target.value
+        })
+        setMonsters(boxSearch)
+      }} />
+      {monsters.map(monster => {
+        return (
+          <div key={monster.id}>
+            {monster.name}
+          </div>
+        )
+      })}
+
     </div>
-  );
+  )
 }
 
 export default App;
